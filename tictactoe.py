@@ -2,7 +2,7 @@ from typing import Callable, List, Union
 
 import numpy as np
 
-from selector import RandomSelector, Selector, StandardInputSelector
+from selector import Selector
 
 
 class Player:
@@ -230,6 +230,8 @@ class CubeTicTacToe(TicTacToe):
 
 
 if __name__ == "__main__":
+    from selector import RandomSelector, StandardInputSelector
+
     size = 3
     print(PlaneTicTacToe.__name__)
     selectors = [RandomSelector(), StandardInputSelector(size**2)]
