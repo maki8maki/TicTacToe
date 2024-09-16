@@ -4,6 +4,12 @@ import numpy as np
 
 from selector import Selector
 
+STD_OUTPUT_SIGN = {
+    -1: "_",
+    0: "o",
+    1: "x",
+}
+
 
 class Player:
     def __init__(self, size: int, candidates: List[List[int]], selector: Selector) -> None:
@@ -66,7 +72,7 @@ class TicTacToe:
     num_cells: int
     players: List[Player]
     rest: List[int]
-    board: List[str]
+    board: List[int]
 
     def __init__(self, size: int, num_cells: int, selectors: List[Selector]) -> None:
         """
@@ -80,7 +86,7 @@ class TicTacToe:
         candidates = self.get_candidates()
         self.players = [Player(size, candidates, selectors[i]) for i in range(2)]
         self.rest = np.arange(num_cells).tolist()
-        self.board = ["_" for _ in range(num_cells)]
+        self.board = [-1 for _ in range(num_cells)]
 
     def get_plane_candidates(self, grid: np.ndarray) -> List[List[int]]:
         """
@@ -130,7 +136,7 @@ class TicTacToe:
         self.rest.remove(num)
         is_win = self.players[turn % 2].my_turn_update(num)
         self.players[(turn + 1) % 2].opponent_turn_update
-        t.board[num] = str(turn % 2)
+        t.board[num] = turn % 2
         return is_win
 
     def execute(self, display_func: Union[str, Callable[[], None]]) -> int:
@@ -191,7 +197,7 @@ class PlaneTicTacToe(TicTacToe):
     def std_output(self) -> None:
         out = ""
         for i in range(self.num_cells):
-            out += self.board[i]
+            out += STD_OUTPUT_SIGN[self.board[i]]
             if (i + 1) % self.size == 0:
                 out += "\n"
         print(out)
@@ -221,7 +227,7 @@ class CubeTicTacToe(TicTacToe):
     def std_output(self) -> None:
         out = ""
         for i in range(self.num_cells):
-            out += self.board[i]
+            out += STD_OUTPUT_SIGN[self.board[i]]
             if (i + 1) % self.size == 0:
                 out += "\n"
             if (i + 1) % (self.size**2) == 0:
