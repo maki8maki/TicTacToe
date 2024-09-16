@@ -132,7 +132,7 @@ class TicTacToe:
         self.rest.remove(num)
         is_win = self.players[turn % 2].my_turn_update(num)
         self.players[(turn + 1) % 2].opponent_turn_update
-        t.board[num] = turn % 2
+        self.board[num] = turn % 2
         return is_win
 
     def execute(self, selectors: List[Selector], display_func: Union[str, Callable[[], None]] = "pass") -> int:
