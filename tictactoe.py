@@ -12,20 +12,17 @@ STD_OUTPUT_SIGN = {
 
 
 class Player:
-    def __init__(self, size: int, candidates: List[List[int]], selector: Selector) -> None:
+    def __init__(self, size: int, candidates: List[List[int]]) -> None:
         """
         Args:
             size (int): 盤の1辺の大きさ
             candidates (List[List[int]]): 初期の候補
-            selector (Selector): マスの選択方法
         """
         self.size = size
 
         # self.candidates: 候補リスト、self.candidates[i]は (size-i) 個選択されている候補
         self.candidates = [[] for _ in range(size + 1)]
         self.candidates[-1] = candidates
-
-        self.selector = selector
 
     def my_turn_update(self, num: int) -> bool:
         """
@@ -74,17 +71,16 @@ class TicTacToe:
     rest: List[int]
     board: List[int]
 
-    def __init__(self, size: int, num_cells: int, selectors: List[Selector]) -> None:
+    def __init__(self, size: int, num_cells: int) -> None:
         """
         Args:
             size (int): 1辺の大きさ
             num_cells (int): マスの総数
-            selectors (List[Selector]): マスの選択方法のリスト
         """
         self.size = size
         self.num_cells = num_cells
         candidates = self.get_candidates()
-        self.players = [Player(size, candidates, selectors[i]) for i in range(2)]
+        self.players = [Player(size, candidates) for _ in range(2)]
         self.rest = np.arange(num_cells).tolist()
         self.board = [-1 for _ in range(num_cells)]
 
@@ -139,10 +135,11 @@ class TicTacToe:
         t.board[num] = turn % 2
         return is_win
 
-    def execute(self, display_func: Union[str, Callable[[], None]]) -> int:
+    def execute(self, selectors: List[Selector], display_func: Union[str, Callable[[], None]] = "pass") -> int:
         """ゲームの実行
 
         Args:
+            selectors (List[Selector]): マスの選択方法のリスト
             display_func (Union[str, Callable[[], None]]): 表示用関数
 
         Returns:
@@ -151,7 +148,7 @@ class TicTacToe:
         display = self.select_display_function(display_func)
         display()
         for i in range(self.num_cells):
-            num = self.players[i % 2].selector.select(self.rest)
+            num = selectors[i % 2].select(self.rest)
             is_win = self.apply_select(i, num)
             display()
             if is_win:
@@ -187,9 +184,9 @@ class TicTacToe:
 
 
 class PlaneTicTacToe(TicTacToe):
-    def __init__(self, size: int, selectors: List[Selector]) -> None:
+    def __init__(self, size: int) -> None:
         num_cells = size**2
-        super().__init__(size, num_cells, selectors)
+        super().__init__(size, num_cells)
 
     def get_candidates(self) -> List[List[int]]:
         return self.get_plane_candidates(np.arange(self.num_cells).reshape(self.size, self.size))
@@ -204,9 +201,9 @@ class PlaneTicTacToe(TicTacToe):
 
 
 class CubeTicTacToe(TicTacToe):
-    def __init__(self, size: int, selectors: List[Selector]) -> None:
+    def __init__(self, size: int) -> None:
         num_cells = size**3
-        super().__init__(size, num_cells, selectors)
+        super().__init__(size, num_cells)
 
     def get_candidates(self) -> List[List[int]]:
         cube = np.arange(self.num_cells).reshape(self.size, self.size, self.size)
@@ -241,8 +238,8 @@ if __name__ == "__main__":
     size = 3
     print(PlaneTicTacToe.__name__)
     selectors = [RandomSelector(), StandardInputSelector(size**2)]
-    t = PlaneTicTacToe(size, selectors)
-    winner = t.execute(display_func="std_output")
+    t = PlaneTicTacToe(size)
+    winner = t.execute(selectors, display_func="std_output")
     if winner == -1:
         print("draw")
     else:
@@ -250,8 +247,8 @@ if __name__ == "__main__":
 
     print(CubeTicTacToe.__name__)
     selectors = [RandomSelector(), StandardInputSelector(size**3)]
-    t = CubeTicTacToe(size, selectors)
-    winner = t.execute(display_func="std_output")
+    t = CubeTicTacToe(size)
+    winner = t.execute(selectors, display_func="std_output")
     if winner == -1:
         print("draw")
     else:
