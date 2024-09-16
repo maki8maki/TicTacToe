@@ -2,7 +2,7 @@ from typing import Callable, List, Union
 
 import numpy as np
 
-from selector import Selector
+from . import Selector
 
 STD_OUTPUT_SIGN = {
     -1: "_",
