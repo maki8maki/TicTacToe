@@ -84,7 +84,7 @@ class TicTacToe:
 
     def reset(self):
         candidates = self.get_candidates()
-        self.players = [Player(size, candidates) for _ in range(2)]
+        self.players = [Player(self.size, candidates) for _ in range(2)]
         self.rest = np.arange(self.num_cells).tolist()
         self.board = [-1 for _ in range(self.num_cells)]
 
