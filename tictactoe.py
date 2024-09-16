@@ -244,9 +244,6 @@ if __name__ == "__main__":
     selectors = [RandomSelector(), StandardInputSelector(size**2)]
     t = PlaneTicTacToe(size)
     winner = t.execute(selectors, display_func="std_output")
-    t.std_output()
-    t.reset()
-    t.std_output()
     if winner == -1:
         print("draw")
     else:
