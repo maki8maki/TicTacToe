@@ -79,10 +79,14 @@ class TicTacToe:
         """
         self.size = size
         self.num_cells = num_cells
+
+        self.reset()
+
+    def reset(self):
         candidates = self.get_candidates()
         self.players = [Player(size, candidates) for _ in range(2)]
-        self.rest = np.arange(num_cells).tolist()
-        self.board = [-1 for _ in range(num_cells)]
+        self.rest = np.arange(self.num_cells).tolist()
+        self.board = [-1 for _ in range(self.num_cells)]
 
     def get_plane_candidates(self, grid: np.ndarray) -> List[List[int]]:
         """
@@ -240,6 +244,9 @@ if __name__ == "__main__":
     selectors = [RandomSelector(), StandardInputSelector(size**2)]
     t = PlaneTicTacToe(size)
     winner = t.execute(selectors, display_func="std_output")
+    t.std_output()
+    t.reset()
+    t.std_output()
     if winner == -1:
         print("draw")
     else:
