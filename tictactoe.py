@@ -187,7 +187,7 @@ class TicTacToe:
             raise TypeError(f"Invalid argument type: {type(display_func)}")
 
 
-class PlaneTicTacToe(TicTacToe):
+class SquareTicTacToe(TicTacToe):
     def __init__(self, size: int) -> None:
         num_cells = size**2
         super().__init__(size, num_cells)
@@ -240,9 +240,9 @@ if __name__ == "__main__":
     from selector import RandomSelector, StandardInputSelector
 
     size = 3
-    print(PlaneTicTacToe.__name__)
+    print(SquareTicTacToe.__name__)
     selectors = [RandomSelector(), StandardInputSelector(size**2)]
-    t = PlaneTicTacToe(size)
+    t = SquareTicTacToe(size)
     winner = t.execute(selectors, display_func="std_output")
     if winner == -1:
         print("draw")
