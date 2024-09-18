@@ -1,8 +1,8 @@
 from .selector import RandomSelector, Selector, StandardInputSelector
-from .tictactoe import CubeTicTacToe, PlaneTicTacToe
+from .tictactoe import CubeTicTacToe, SquareTicTacToe
 
 __all__ = [
-    "PlaneTicTacToe",
+    "SquareTicTacToe",
     "CubeTicTacToe",
     "Selector",
     "RandomSelector",
