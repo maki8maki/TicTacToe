@@ -1,4 +1,9 @@
-from .selector import RandomSelector, Selector, StandardInputSelector
+from .selector import (
+    BitStrategicSelector,
+    RandomSelector,
+    Selector,
+    StandardInputSelector,
+)
 from .tictactoe import CubeTicTacToe, SquareTicTacToe, TicTacToe
 
 __all__ = [
@@ -8,4 +13,5 @@ __all__ = [
     "Selector",
     "RandomSelector",
     "StandardInputSelector",
+    "BitStrategicSelector",
 ]
