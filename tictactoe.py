@@ -2,7 +2,7 @@ from typing import Callable, List, Union
 
 import numpy as np
 
-from . import Selector
+from . import BitStrategicSelector, Selector
 
 STD_OUTPUT_SIGN = {
     -1: "_",
@@ -152,7 +152,11 @@ class TicTacToe:
         display = self.select_display_function(display_func)
         display()
         for i in range(self.num_cells):
-            num = selectors[i % 2].select(self.rest)
+            selector = selectors[i % 2]
+            if isinstance(selector, BitStrategicSelector):
+                num = selector.select(self.rest, self.players[i % 2].candidates, self.players[(i + 1) % 2].candidates)
+            else:
+                num = selectors[i % 2].select(self.rest)
             is_win = self.apply_select(i, num)
             display()
             if is_win:
@@ -241,8 +245,8 @@ if __name__ == "__main__":
 
     size = 3
     print(SquareTicTacToe.__name__)
-    selectors = [RandomSelector(), StandardInputSelector(size**2)]
     t = SquareTicTacToe(size)
+    selectors = [RandomSelector(), StandardInputSelector(size**2)]
     winner = t.execute(selectors, display_func="std_output")
     if winner == -1:
         print("draw")
@@ -250,8 +254,10 @@ if __name__ == "__main__":
         print(f"winner is {winner}")
 
     print(CubeTicTacToe.__name__)
-    selectors = [RandomSelector(), StandardInputSelector(size**3)]
     t = CubeTicTacToe(size)
+    # selectors = [RandomSelector(), StandardInputSelector(size**3)]
+    selectors = [BitStrategicSelector(size, size**3, t.get_candidates()), StandardInputSelector(size**3)]
+    # selectors.reverse()
     winner = t.execute(selectors, display_func="std_output")
     if winner == -1:
         print("draw")
