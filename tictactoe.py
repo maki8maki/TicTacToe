@@ -225,7 +225,6 @@ class CubeTicTacToe(TicTacToe):
             diagonals[1].append(int(cube[i, -1 - i, i]))
             diagonals[2].append(int(cube[-1 - i, i, i]))
             diagonals[3].append(int(cube[-1 - i, -1 - i, i]))
-        print(diagonals)
         candidates += diagonals
         return candidates
 
